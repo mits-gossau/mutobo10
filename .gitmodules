@@ -1,0 +1,6 @@
+[submodule "Dit.Umb.Mutobo10/wwwroot/web-components-cms-template"]
+	path = Dit.Umb.Mutobo10/wwwroot/web-components-cms-template
+	url = https://github.com/mits-gossau/web-components-cms-template.git
+[submodule "Dit.Umb.Mutobo10/wwwroot/web-components-toolbox"]
+	path = Dit.Umb.Mutobo10/wwwroot/web-components-toolbox
+	url = https://github.com/mits-gossau/web-components-toolbox.git
