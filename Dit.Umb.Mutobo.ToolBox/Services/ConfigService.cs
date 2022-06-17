@@ -9,66 +9,65 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
 
-namespace Dit.Umb.Mutobo.ToolBox.Services
+namespace Dit.Umb.Mutobo.ToolBox.Services;
+
+public class ConfigService : BaseService, IConfigService
 {
-    public class ConfigService : BaseService, IConfigService
+    private readonly IConfiguration _configuration;
+
+    public ConfigService(
+        IConfiguration configuration,
+        ILogger<ConfigService> logger,
+        IUmbracoContextAccessor contextAccessor)
+: base(logger, contextAccessor)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public ConfigService(
-    IConfiguration configuration,
-    ILogger<ConfigService> logger,
-    IUmbracoContextAccessor contextAccessor)
-    : base(logger, contextAccessor)
+
+    public bool? GetAppSettingBoolValue(string key, bool essential = true)
+    {
+        var result = _configuration.GetValue<bool?>(key);
+
+        if (result == null)
         {
-            _configuration = configuration;
+            if (essential)
+                throw new AppSettingsException($"Missing config/AppSettings.config or config entry: {key}");
+            else
+                Logger.LogWarning($"Missing config/AppSettings.config or config entry: {key}");
         }
 
+        return result;
+    }
 
-        public bool? GetAppSettingBoolValue(string key, bool essential = true)
+    public int? GetAppSettingIntValue(string key, bool essential = true)
+    {
+        var result = _configuration.GetValue<int?>(key);
+
+        if (result == null)
         {
-            var result = _configuration.GetValue<bool?>(key);
-
-            if (result == null)
-            {
-                if (essential)
-                    throw new AppSettingsException($"Missing config/AppSettings.config or config entry: {key}");
-                else
-                    Logger.LogWarning($"Missing config/AppSettings.config or config entry: {key}");
-            }
-
-            return result;
+            if (essential)
+                throw new AppSettingsException($"Missing config/AppSettings.config or config entry: {key}");
+            else
+                Logger.LogWarning($"Missing config/AppSettings.config or config entry: {key}");
         }
 
-        public int? GetAppSettingIntValue(string key, bool essential = true)
+        return result;
+    }
+
+    public string GetAppSettingValue(string key, bool essential = true)
+    {
+        var result = _configuration.GetValue<string>(key);
+
+        if (result == null)
         {
-            var result = _configuration.GetValue<int?>(key);
-
-            if (result == null)
-            {
-                if (essential)
-                    throw new AppSettingsException($"Missing config/AppSettings.config or config entry: {key}");
-                else
-                    Logger.LogWarning($"Missing config/AppSettings.config or config entry: {key}");
-            }
-
-            return result;
+            if (essential)
+                throw new AppSettingsException($"Missing config/AppSettings.config or config entry: {key}");
+            else
+                Logger.LogWarning($"Missing config/AppSettings.config or config entry: {key}");
         }
 
-        public string GetAppSettingValue(string key, bool essential = true)
-        {
-            var result = _configuration.GetValue<string>(key);
-
-            if (result == null)
-            {
-                if (essential)
-                    throw new AppSettingsException($"Missing config/AppSettings.config or config entry: {key}");
-                else
-                    Logger.LogWarning($"Missing config/AppSettings.config or config entry: {key}");
-            }
-
-            return result;
-        }
+        return result;
     }
 }
 

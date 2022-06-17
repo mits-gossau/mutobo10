@@ -7,19 +7,18 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Enum
+namespace Dit.Umb.Mutobo.ToolBox.Enum;
+
+[JsonConverter(typeof(StringEnumConverter))]
+public enum EImageDimension
 {
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum EImageDimension
-    {
-        Default,
-        [EnumMember(Value = "small")]
-        Small,
-        [EnumMember(Value = "medium")]
-        Medium,
-        [EnumMember(Value = "large")]
-        Large,
-        [EnumMember(Value = "extra-large")]
-        ExtraLarge
-    }
+    Default,
+    [EnumMember(Value = "small")]
+    Small,
+    [EnumMember(Value = "medium")]
+    Medium,
+    [EnumMember(Value = "large")]
+    Large,
+    [EnumMember(Value = "extra-large")]
+    ExtraLarge
 }

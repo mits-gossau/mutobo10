@@ -10,35 +10,34 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.Config
+namespace Dit.Umb.Mutobo.ToolBox.Models.Config;
+
+public class FooterConfig : PublishedElementModel, IFooterConfiguration
 {
-    public class FooterConfig : PublishedElementModel, IFooterConfiguration
+    public IEnumerable<FooterNavBlock> FooterNavBlocks { get; set; }
+
+    public IEnumerable<Link> FooterLinks =>
+        this.Value<IEnumerable<Link>>(ElementTypes.FooterConfiguration.Fields.Links);
+
+    public IEnumerable<FooterContactArea> FooterContactBlock { get; set; }
+
+    public IEnumerable<PoCo.Language> Languages { get; set; }
+
+
+    public IEnumerable<PictureLink> PictureLinks { get; set; }
+
+    public Image HomePageLogo { get; set; }
+
+    public string Copyright => $"&copy; {DateTime.Today.Year} {this.Value<string>(ElementTypes.FooterConfiguration.Fields.CopyRight)}";
+
+    public IEnumerable<Link> BlockLinks => this.Value<IEnumerable<Link>>(ElementTypes.FooterConfiguration.Fields.BlockLinks);
+
+
+    public string Theme { get; set; }
+
+
+
+    public FooterConfig(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
     {
-        public IEnumerable<FooterNavBlock> FooterNavBlocks { get; set; }
-
-        public IEnumerable<Link> FooterLinks =>
-            this.Value<IEnumerable<Link>>(ElementTypes.FooterConfiguration.Fields.Links);
-
-        public IEnumerable<FooterContactArea> FooterContactBlock { get; set; }
-
-        public IEnumerable<PoCo.Language> Languages { get; set; }
-
-
-        public IEnumerable<PictureLink> PictureLinks { get; set; }
-
-        public Image HomePageLogo { get; set; }
-
-        public string Copyright => $"&copy; {DateTime.Today.Year} {this.Value<string>(ElementTypes.FooterConfiguration.Fields.CopyRight)}";
-
-        public IEnumerable<Link> BlockLinks => this.Value<IEnumerable<Link>>(ElementTypes.FooterConfiguration.Fields.BlockLinks);
-
-
-        public string Theme { get; set; }
-
-
-
-        public FooterConfig(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
-        {
-        }
     }
 }

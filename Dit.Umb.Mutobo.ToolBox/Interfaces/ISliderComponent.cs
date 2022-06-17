@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
+
+public interface ISliderComponent
 {
-    public interface ISliderComponent
-    {
-        IEnumerable<ISliderItem> Slides { get; }
-        int? Height { get; }
-        int? Interval { get; }
-        int? Width { get; }
-        string GetPictureNameSpace();
-        string Anchor { get; set; }
-    }
+    IEnumerable<ISliderItem> Slides { get; }
+    int? Height { get; }
+    int? Interval { get; }
+    int? Width { get; }
+    string GetPictureNameSpace();
+    string Anchor { get; set; }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Enum
+namespace Dit.Umb.Mutobo.ToolBox.Enum;
+
+public enum EPosition
 {
-    public enum EPosition
-    {
-        Undefined, Fixed
-    }
+    Undefined, Fixed
 }

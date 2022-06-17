@@ -16,72 +16,71 @@ using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Controllers.PageControllers
+namespace Dit.Umb.Mutobo.ToolBox.Controllers.PageControllers;
+
+public class BasePageController : RenderController
 {
-    public class BasePageController : RenderController
+
+    protected readonly IImageService ImageService;
+    protected readonly IPageLayoutService PageLayoutService;
+    protected readonly IMutoboContentService ContentService;
+    protected readonly ISearchService SearchService;
+
+
+
+    public BasePageController(
+        ILogger<RenderController> logger,
+        ICompositeViewEngine compositeViewEngine,
+        IUmbracoContextAccessor umbracoContextAccessor,
+        IImageService imageService,
+        IPageLayoutService pageLayoutService,
+        IMutoboContentService contentService, ISearchService searchService)
+        : base(logger, compositeViewEngine, umbracoContextAccessor)
     {
+        ImageService = imageService;
+        PageLayoutService = pageLayoutService;
+        ContentService = contentService;
+        SearchService = searchService;
+    }
 
-        protected readonly IImageService ImageService;
-        protected readonly IPageLayoutService PageLayoutService;
-        protected readonly IMutoboContentService ContentService;
-        protected readonly ISearchService SearchService;
+    public override IActionResult Index() 
+    {
+        var searchString = this.HttpContext.Request.Query["q"].ToString();
 
-
-
-        public BasePageController(
-            ILogger<RenderController> logger,
-            ICompositeViewEngine compositeViewEngine,
-            IUmbracoContextAccessor umbracoContextAccessor,
-            IImageService imageService,
-            IPageLayoutService pageLayoutService,
-            IMutoboContentService contentService, ISearchService searchService)
-            : base(logger, compositeViewEngine, umbracoContextAccessor)
+        if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrWhiteSpace(searchString))
         {
-            ImageService = imageService;
-            PageLayoutService = pageLayoutService;
-            ContentService = contentService;
-            SearchService = searchService;
+
+            return View("~/Views/WCSearchResults.cshtml", SearchService.PerformSearch(searchString) as SearchResultsPage);
         }
 
-        public override IActionResult Index() 
+ 
+
+        var redirectLink = CurrentPage.Value<Link>(DocumentTypes.BasePage.Fields.RedirectLink);
+
+        if (!string.IsNullOrEmpty(redirectLink?.Url))
         {
-            var searchString = this.HttpContext.Request.Query["q"].ToString();
+            var url = redirectLink.Url.ToLower();
+            if (!url.StartsWith("http"))
+                url = url.Insert(0, "http://");
 
-            if (!string.IsNullOrEmpty(searchString) && !string.IsNullOrWhiteSpace(searchString))
-            {
-
-                return View("~/Views/WCSearchResults.cshtml", SearchService.PerformSearch(searchString) as SearchResultsPage);
-            }
-
-     
-
-            var redirectLink = CurrentPage.Value<Link>(DocumentTypes.BasePage.Fields.RedirectLink);
-
-            if (!string.IsNullOrEmpty(redirectLink?.Url))
-            {
-                var url = redirectLink.Url.ToLower();
-                if (!url.StartsWith("http"))
-                    url = url.Insert(0, "http://");
-
-                HttpContext.Response.Redirect(url);
-            }
-
-            var model = ContentService.GetPageModel(CurrentPage);
-
-            var homePage = CurrentPage.AncestorsOrSelf()
-                .FirstOrDefault(c => c.ContentType.Alias == DocumentTypes.HomePage.Alias);
-
-
-            model.HeaderConfiguration = PageLayoutService.GetHeaderConfiguration(CurrentPage);
-            model.FooterConfiguration = PageLayoutService.GetFooterConfiguration(CurrentPage);
-
-            if (model.FooterConfiguration != null)
-                model.FooterConfiguration.HomePageLogo = model.HeaderConfiguration?.Logo;
-
-            return CurrentTemplate<BasePage>(model);
-
+            HttpContext.Response.Redirect(url);
         }
 
+        var model = ContentService.GetPageModel(CurrentPage);
+
+        var homePage = CurrentPage.AncestorsOrSelf()
+            .FirstOrDefault(c => c.ContentType.Alias == DocumentTypes.HomePage.Alias);
+
+
+        model.HeaderConfiguration = PageLayoutService.GetHeaderConfiguration(CurrentPage);
+        model.FooterConfiguration = PageLayoutService.GetFooterConfiguration(CurrentPage);
+
+        if (model.FooterConfiguration != null)
+            model.FooterConfiguration.HomePageLogo = model.HeaderConfiguration?.Logo;
+
+        return CurrentTemplate<BasePage>(model);
 
     }
+
+
 }

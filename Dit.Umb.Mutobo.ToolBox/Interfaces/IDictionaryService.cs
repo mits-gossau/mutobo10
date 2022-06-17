@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
+
+public interface IDictionaryService
 {
-    public interface IDictionaryService
-    {
-        string GetDictionaryValue(string key, string defaultValue = null);
-    }
+    string GetDictionaryValue(string key, string defaultValue = null);
 }

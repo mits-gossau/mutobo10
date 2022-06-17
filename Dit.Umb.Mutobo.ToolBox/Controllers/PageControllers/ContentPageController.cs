@@ -8,31 +8,30 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
 
-namespace Dit.Umb.Mutobo.ToolBox.Controllers.PageControllers
+namespace Dit.Umb.Mutobo.ToolBox.Controllers.PageControllers;
+
+public class ContentPageController : ArticlePageController
 {
-    public class ContentPageController : ArticlePageController
+    public ContentPageController(
+        ILogger<ContentPageController> logger,
+        ICompositeViewEngine compositeViewEngine,
+        IUmbracoContextAccessor umbracoContextAccessor,
+        IImageService imageService,
+        IMutoboContentService contentService,
+        IPageLayoutService pageLayoutService,
+        ISearchService searchService)
+            : base(
+                  logger,
+                  compositeViewEngine,
+                  umbracoContextAccessor,
+                  imageService,
+                  pageLayoutService,
+                  contentService,
+                  searchService)
     {
-        public ContentPageController(
-            ILogger<ContentPageController> logger,
-            ICompositeViewEngine compositeViewEngine,
-            IUmbracoContextAccessor umbracoContextAccessor,
-            IImageService imageService,
-            IMutoboContentService contentService,
-            IPageLayoutService pageLayoutService,
-            ISearchService searchService)
-                : base(
-                      logger,
-                      compositeViewEngine,
-                      umbracoContextAccessor,
-                      imageService,
-                      pageLayoutService,
-                      contentService,
-                      searchService)
-        {
-
-        }
-
-
 
     }
+
+
+
 }

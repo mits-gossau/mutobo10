@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
+
+public class Document
 {
-    public class Document
-    {
-        public string Name { get; set; }
-        public string Extension { get; set; }
-        public string Url { get; set; }
-    }
+    public string Name { get; set; }
+    public string Extension { get; set; }
+    public string Url { get; set; }
 }

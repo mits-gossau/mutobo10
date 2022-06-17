@@ -16,30 +16,29 @@ using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Cms.Web.Website.Controllers;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Controllers.SurfaceControllers
+namespace Dit.Umb.Mutobo.ToolBox.Controllers.SurfaceControllers;
+
+public class GoogleAnalyticsController : SurfaceController
 {
-    public class GoogleAnalyticsController : SurfaceController
+    public GoogleAnalyticsController(IUmbracoContextAccessor umbracoContextAccessor, IUmbracoDatabaseFactory databaseFactory, ServiceContext services, AppCaches appCaches, IProfilingLogger profilingLogger, IPublishedUrlProvider publishedUrlProvider) : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
     {
-        public GoogleAnalyticsController(IUmbracoContextAccessor umbracoContextAccessor, IUmbracoDatabaseFactory databaseFactory, ServiceContext services, AppCaches appCaches, IProfilingLogger profilingLogger, IPublishedUrlProvider publishedUrlProvider) : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
+    }
+
+    // GET: GoogleAnalytics
+    public ActionResult Index()
+    {
+        var homePage = CurrentPage.AncestorsOrSelf().FirstOrDefault(c =>
+            c.ContentType.Alias == DocumentTypes.HomePage.Alias);
+
+        var code = homePage?.Value<string>(DocumentTypes.BasePage.Fields.GoogleAnalyticsKey) ?? string.Empty;
+
+        if (homePage == null)
+            return new EmptyResult();
+
+        return View("~/Views/Partials/GoogleAnalytics.cshtml", new GoogleAnalyticsModel()
         {
-        }
+            Key = code
 
-        // GET: GoogleAnalytics
-        public ActionResult Index()
-        {
-            var homePage = CurrentPage.AncestorsOrSelf().FirstOrDefault(c =>
-                c.ContentType.Alias == DocumentTypes.HomePage.Alias);
-
-            var code = homePage?.Value<string>(DocumentTypes.BasePage.Fields.GoogleAnalyticsKey) ?? string.Empty;
-
-            if (homePage == null)
-                return new EmptyResult();
-
-            return View("~/Views/Partials/GoogleAnalytics.cshtml", new GoogleAnalyticsModel()
-            {
-                Key = code
-
-            });
-        }
+        });
     }
 }

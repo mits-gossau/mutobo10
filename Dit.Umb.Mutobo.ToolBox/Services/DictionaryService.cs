@@ -9,34 +9,33 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Dictionary;
 using Umbraco.Cms.Core.Web;
 
-namespace Dit.Umb.Mutobo.ToolBox.Services
+namespace Dit.Umb.Mutobo.ToolBox.Services;
+
+public class DictionaryService : BaseService, IDictionaryService
 {
-    public class DictionaryService : BaseService, IDictionaryService
+    private readonly ICultureDictionaryFactory _cultureDictionaryFactory;
+    private ICultureDictionary _cultureDictionary;
+
+    T Ensure<T>(T o) where T : class => o ?? throw new InvalidOperationException("This UmbracoHelper instance has not been initialized.");
+
+    private ICultureDictionaryFactory CultureDictionaryFactory => Ensure(_cultureDictionaryFactory);
+
+
+    public ICultureDictionary CultureDictionary => _cultureDictionary
+         ?? (_cultureDictionary = CultureDictionaryFactory.CreateDictionary());
+
+    public DictionaryService(ILogger<DictionaryService> logger, IUmbracoContextAccessor contextAccessor, ICultureDictionaryFactory cultureDictionary) : base(logger, contextAccessor)
     {
-        private readonly ICultureDictionaryFactory _cultureDictionaryFactory;
-        private ICultureDictionary _cultureDictionary;
+        _cultureDictionaryFactory = cultureDictionary ?? throw new ArgumentNullException(nameof(cultureDictionary));
+    }
 
-        T Ensure<T>(T o) where T : class => o ?? throw new InvalidOperationException("This UmbracoHelper instance has not been initialized.");
-
-        private ICultureDictionaryFactory CultureDictionaryFactory => Ensure(_cultureDictionaryFactory);
-
-
-        public ICultureDictionary CultureDictionary => _cultureDictionary
-             ?? (_cultureDictionary = CultureDictionaryFactory.CreateDictionary());
-
-        public DictionaryService(ILogger<DictionaryService> logger, IUmbracoContextAccessor contextAccessor, ICultureDictionaryFactory cultureDictionary) : base(logger, contextAccessor)
+    public string GetDictionaryValue(string key, string defaultValue = "TRANSLATE")
+    {
+        var dictionaryValue = CultureDictionary[key];
+        if (string.IsNullOrEmpty(dictionaryValue))
         {
-            _cultureDictionaryFactory = cultureDictionary ?? throw new ArgumentNullException(nameof(cultureDictionary));
+            dictionaryValue = defaultValue;
         }
-
-        public string GetDictionaryValue(string key, string defaultValue = "TRANSLATE")
-        {
-            var dictionaryValue = CultureDictionary[key];
-            if (string.IsNullOrEmpty(dictionaryValue))
-            {
-                dictionaryValue = defaultValue;
-            }
-            return dictionaryValue;
-        }
+        return dictionaryValue;
     }
 }

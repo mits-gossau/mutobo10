@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
-{
-    public interface IPictureLinkService
-    {
-        IEnumerable<PictureLink> GetPictureLinks(IEnumerable<IPublishedElement> elements);
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
 
-    }
+public interface IPictureLinkService
+{
+    IEnumerable<PictureLink> GetPictureLinks(IEnumerable<IPublishedElement> elements);
+
 }

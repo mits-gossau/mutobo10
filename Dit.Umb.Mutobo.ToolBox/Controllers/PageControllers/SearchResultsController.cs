@@ -11,28 +11,27 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
 
-namespace Dit.Umb.Mutobo.ToolBox.Controllers.PageControllers
+namespace Dit.Umb.Mutobo.ToolBox.Controllers.PageControllers;
+
+public class SearchResultsController : BasePageController
 {
-    public class SearchResultsController : BasePageController
+    public SearchResultsController(
+        ILogger<SearchResultsController> logger,
+        ICompositeViewEngine compositeViewEngine,
+        IUmbracoContextAccessor umbracoContextAccessor,
+        IImageService imageService,
+        IPageLayoutService pageLayoutService,
+        IMutoboContentService contentService,
+        ISearchService searchService) : base(
+            logger,
+            compositeViewEngine,
+            umbracoContextAccessor,
+            imageService,
+            pageLayoutService,
+            contentService,
+            searchService)
     {
-        public SearchResultsController(
-            ILogger<SearchResultsController> logger,
-            ICompositeViewEngine compositeViewEngine,
-            IUmbracoContextAccessor umbracoContextAccessor,
-            IImageService imageService,
-            IPageLayoutService pageLayoutService,
-            IMutoboContentService contentService,
-            ISearchService searchService) : base(
-                logger,
-                compositeViewEngine,
-                umbracoContextAccessor,
-                imageService,
-                pageLayoutService,
-                contentService,
-                searchService)
-        {
-        }
-
-
     }
+
+
 }

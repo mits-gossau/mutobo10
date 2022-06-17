@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
+
+public interface IMailService
 {
-    public interface IMailService
-    {
-        void SendConfirmationMail(ContactFormData model);
-        void SendContactMail(ContactFormData model);
-    }
+    void SendConfirmationMail(ContactFormData model);
+    void SendContactMail(ContactFormData model);
 }

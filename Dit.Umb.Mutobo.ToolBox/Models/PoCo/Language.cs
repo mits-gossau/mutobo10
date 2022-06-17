@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
+
+public class Language
 {
-    public class Language
-    {
-        public string Name { get; set; }
-        public string ISO { get; set; }
-        public string Url { get; set; }
-        public string CultureName { get; set; }
-    }
+    public string Name { get; set; }
+    public string ISO { get; set; }
+    public string Url { get; set; }
+    public string CultureName { get; set; }
 }

@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
-{
-    public interface ISeoService
-    {
-        public SeoConfig GetSeoConfiguration();
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
 
-     
-    }
+public interface ISeoService
+{
+    public SeoConfig GetSeoConfiguration();
+
+ 
 }

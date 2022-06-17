@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Services
+namespace Dit.Umb.Mutobo.ToolBox.Services;
+
+public class ThemeService : IThemeService
 {
-    public class ThemeService : IThemeService
-    {
-    }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Enum
+namespace Dit.Umb.Mutobo.ToolBox.Enum;
+
+public enum EDirection
 {
-    public enum EDirection
-    {
-        Undefined, Left, Right, Up, Down
-    }
+    Undefined, Left, Right, Up, Down
 }

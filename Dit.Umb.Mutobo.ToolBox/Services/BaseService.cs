@@ -7,29 +7,28 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 
-namespace Dit.Umb.Mutobo.ToolBox.Services
+namespace Dit.Umb.Mutobo.ToolBox.Services;
+
+public class BaseService
 {
-    public class BaseService
+    protected readonly ILogger Logger;
+    protected readonly IUmbracoContextAccessor ContextAccessor;
+    protected readonly IUmbracoContext Context;
+    protected readonly IPublishedContent CurrentPage;
+
+    /// <summary>
+    /// constructor for a base service
+    /// </summary>
+    /// <param name="logger">logger svervice</param>
+    /// <param name="contextAccessor">umbraco contect accessor</param>
+    protected BaseService(ILogger<BaseService> logger, IUmbracoContextAccessor contextAccessor)
     {
-        protected readonly ILogger Logger;
-        protected readonly IUmbracoContextAccessor ContextAccessor;
-        protected readonly IUmbracoContext Context;
-        protected readonly IPublishedContent CurrentPage;
+        Logger = logger;
+        ContextAccessor = contextAccessor;
 
-        /// <summary>
-        /// constructor for a base service
-        /// </summary>
-        /// <param name="logger">logger svervice</param>
-        /// <param name="contextAccessor">umbraco contect accessor</param>
-        protected BaseService(ILogger<BaseService> logger, IUmbracoContextAccessor contextAccessor)
+        if (ContextAccessor.TryGetUmbracoContext(out Context))
         {
-            Logger = logger;
-            ContextAccessor = contextAccessor;
-
-            if (ContextAccessor.TryGetUmbracoContext(out Context))
-            {
-                CurrentPage = Context.PublishedRequest.PublishedContent;
-            }
+            CurrentPage = Context.PublishedRequest.PublishedContent;
         }
     }
 }

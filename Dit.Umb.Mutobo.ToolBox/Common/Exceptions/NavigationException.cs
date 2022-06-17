@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions
+namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions;
+
+public class NavigationException : MutoboException
 {
-    public class NavigationException : MutoboException
+    public NavigationException(string message) : base(message)
     {
-        public NavigationException(string message) : base(message)
-        {
-        }
     }
 }

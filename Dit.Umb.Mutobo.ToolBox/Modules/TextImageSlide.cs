@@ -10,27 +10,26 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Modules
+namespace Dit.Umb.Mutobo.ToolBox.Modules;
+
+public class TextImageSlide : MutoboContentModule, ISliderItem
 {
-    public class TextImageSlide : MutoboContentModule, ISliderItem
+    public Image Image { get; set; }
+
+    public string Text => this.HasValue(ElementTypes.TextImageSlide.Fields.Text)
+        ? this.Value<string>(ElementTypes.TextImageSlide.Fields.Text)
+        : null;
+
+    public Link Link => this.HasValue(ElementTypes.TextImageSlide.Fields.Link)
+        ? this.Value<Link>(ElementTypes.TextImageSlide.Fields.Link)
+        : null;
+    public string Title => this.HasValue(ElementTypes.TextImageSlide.Fields.Title)
+        ? this.Value<string>(ElementTypes.TextImageSlide.Fields.Title)
+        : null;
+
+
+
+    public TextImageSlide(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
     {
-        public Image Image { get; set; }
-
-        public string Text => this.HasValue(ElementTypes.TextImageSlide.Fields.Text)
-            ? this.Value<string>(ElementTypes.TextImageSlide.Fields.Text)
-            : null;
-
-        public Link Link => this.HasValue(ElementTypes.TextImageSlide.Fields.Link)
-            ? this.Value<Link>(ElementTypes.TextImageSlide.Fields.Link)
-            : null;
-        public string Title => this.HasValue(ElementTypes.TextImageSlide.Fields.Title)
-            ? this.Value<string>(ElementTypes.TextImageSlide.Fields.Title)
-            : null;
-
-
-
-        public TextImageSlide(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
-        {
-        }
     }
 }

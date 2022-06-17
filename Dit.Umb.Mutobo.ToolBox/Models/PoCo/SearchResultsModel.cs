@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
+
+public class SearchResultModel : ISearchResultsModel
 {
-    public class SearchResultModel : ISearchResultsModel
-    {
-        public string Term { get; set; }
-        public string Page { get; set; }
-        public IEnumerable<SearchResult> Results { get; set; }
-    }
+    public string Term { get; set; }
+    public string Page { get; set; }
+    public IEnumerable<SearchResult> Results { get; set; }
 }

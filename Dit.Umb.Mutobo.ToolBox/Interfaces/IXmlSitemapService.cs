@@ -6,10 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
+
+public interface IXmlSitemapService
 {
-    public interface IXmlSitemapService
-    {
-        IEnumerable<BasePage> GetXmlSitemap(IPublishedContent model);
-    }
+    IEnumerable<BasePage> GetXmlSitemap(IPublishedContent model);
 }

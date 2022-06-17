@@ -7,17 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.Pages
+namespace Dit.Umb.Mutobo.ToolBox.Models.Pages;
+
+public class SearchResultsPage : BasePage, ISearchResultsModel
 {
-    public class SearchResultsPage : BasePage, ISearchResultsModel
+    public string Term { get; set; }
+    public string Page { get; set; }
+    public IEnumerable<SearchResult> Results { get; set; }
+
+
+    public SearchResultsPage(IPublishedContent content) : base(content)
     {
-        public string Term { get; set; }
-        public string Page { get; set; }
-        public IEnumerable<SearchResult> Results { get; set; }
-
-
-        public SearchResultsPage(IPublishedContent content) : base(content)
-        {
-        }
     }
 }

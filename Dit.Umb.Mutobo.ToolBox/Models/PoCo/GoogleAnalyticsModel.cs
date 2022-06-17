@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
+
+public class GoogleAnalyticsModel
 {
-    public class GoogleAnalyticsModel
-    {
-        public string Key { get; set; }
-    }
+    public string Key { get; set; }
 }

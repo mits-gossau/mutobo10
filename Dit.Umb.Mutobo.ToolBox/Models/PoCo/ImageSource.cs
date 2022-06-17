@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
+
+public class ImageSource
 {
-    public class ImageSource
-    {
-        public string Src { get; set; }
-        public EImageDimension Size { get; set; }
-        public string Type { get; set; }
-    }
+    public string Src { get; set; }
+    public EImageDimension Size { get; set; }
+    public string Type { get; set; }
 }

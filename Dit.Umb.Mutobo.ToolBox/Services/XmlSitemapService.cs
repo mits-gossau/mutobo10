@@ -11,52 +11,51 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 
-namespace Dit.Umb.Mutobo.ToolBox.Services
+namespace Dit.Umb.Mutobo.ToolBox.Services;
+
+public class XmlSitemapService : BaseService, IXmlSitemapService
 {
-	public class XmlSitemapService : BaseService, IXmlSitemapService
+	private readonly IHttpContextAccessor _httpContextAccessor;
+
+	public XmlSitemapService(ILogger<XmlSitemapService> logger, IUmbracoContextAccessor contextAccessor, IHttpContextAccessor httpContextAccessor) : base(logger, contextAccessor)
 	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
+		_httpContextAccessor = httpContextAccessor;
+	}
 
-		public XmlSitemapService(ILogger<XmlSitemapService> logger, IUmbracoContextAccessor contextAccessor, IHttpContextAccessor httpContextAccessor) : base(logger, contextAccessor)
+	public IEnumerable<BasePage> GetXmlSitemap(IPublishedContent model)
+
+	{
+		var homePage = CurrentPage.Parent;
+
+
+		return from n in GenerateSiteMapNodes(homePage)
+			   where n.ContentType.CompositionAliases.Contains(DocumentTypes.BasePage.Alias)
+			   select new BasePage(n);
+	}
+
+	private IEnumerable<IPublishedContent> GenerateSiteMapNodes(IPublishedContent content)
+	{
+		yield return content;
+		if (content.Children == null)
 		{
-			_httpContextAccessor = httpContextAccessor;
+			yield break;
 		}
-
-		public IEnumerable<BasePage> GetXmlSitemap(IPublishedContent model)
-
+		foreach (IPublishedContent child in content.Children)
 		{
-			var homePage = CurrentPage.Parent;
-
-
-			return from n in GenerateSiteMapNodes(homePage)
-				   where n.ContentType.CompositionAliases.Contains(DocumentTypes.BasePage.Alias)
-				   select new BasePage(n);
-		}
-
-		private IEnumerable<IPublishedContent> GenerateSiteMapNodes(IPublishedContent content)
-		{
-			yield return content;
-			if (content.Children == null)
+			foreach (IPublishedContent item in GenerateSiteMapNodes(child))
 			{
-				yield break;
-			}
-			foreach (IPublishedContent child in content.Children)
-			{
-				foreach (IPublishedContent item in GenerateSiteMapNodes(child))
-				{
-					yield return item;
-				}
+				yield return item;
 			}
 		}
+	}
 
-		private string EnsureUrlStartsWithDomain(string url)
+	private string EnsureUrlStartsWithDomain(string url)
+	{
+		if (url.StartsWith("http"))
 		{
-			if (url.StartsWith("http"))
-			{
-				return url;
-			}
-
-			return string.Concat("https://" + _httpContextAccessor.HttpContext.Request.Host.Host + "/", url);
+			return url;
 		}
+
+		return string.Concat("https://" + _httpContextAccessor.HttpContext.Request.Host.Host + "/", url);
 	}
 }

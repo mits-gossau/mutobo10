@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions
+namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions;
+
+public class SearchException : MutoboException
 {
-    public class SearchException : MutoboException
+    public SearchException(string message) : base(message)
     {
-        public SearchException(string message) : base(message)
-        {
-        }
     }
 }

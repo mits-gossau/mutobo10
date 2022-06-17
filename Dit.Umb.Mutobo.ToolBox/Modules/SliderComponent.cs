@@ -10,51 +10,50 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Modules
+namespace Dit.Umb.Mutobo.ToolBox.Modules;
+
+public class SliderComponent : MutoboContentModule, ISliderComponent, IModule
 {
-    public class SliderComponent : MutoboContentModule, ISliderComponent, IModule
-    {
 
-        public IEnumerable<ISliderItem> Slides { get; set; }
+    public IEnumerable<ISliderItem> Slides { get; set; }
 
-        public int? Height => this.HasValue(ElementTypes.SliderComponent.Fields.Height) && this.Value<int?>(ElementTypes.SliderComponent.Fields.Height) > 0
-            ? this.Value<int?>(ElementTypes.SliderComponent.Fields.Height)
-            : null;
-        public int? Interval => this.HasValue(ElementTypes.SliderComponent.Fields.Interval)
-            ? this.Value<int?>(ElementTypes.SliderComponent.Fields.Interval)
+    public int? Height => this.HasValue(ElementTypes.SliderComponent.Fields.Height) && this.Value<int?>(ElementTypes.SliderComponent.Fields.Height) > 0
+        ? this.Value<int?>(ElementTypes.SliderComponent.Fields.Height)
+        : null;
+    public int? Interval => this.HasValue(ElementTypes.SliderComponent.Fields.Interval)
+        ? this.Value<int?>(ElementTypes.SliderComponent.Fields.Interval)
+    : null;
+
+
+
+    public int? Width => this.HasValue(ElementTypes.SliderComponent.Fields.Width) && this.Value<int?>(ElementTypes.SliderComponent.Fields.Width) > 0
+        ? this.Value<int?>(ElementTypes.SliderComponent.Fields.Width)
         : null;
 
+    public string GetPictureNameSpace()
+    {
+        var result = "carousel-picture-";
+        EGalleryType galleryType = EGalleryType.FullWidth;
 
-
-        public int? Width => this.HasValue(ElementTypes.SliderComponent.Fields.Width) && this.Value<int?>(ElementTypes.SliderComponent.Fields.Width) > 0
-            ? this.Value<int?>(ElementTypes.SliderComponent.Fields.Width)
-            : null;
-
-        public string GetPictureNameSpace()
+        if (this.HasValue(ElementTypes.SliderComponent.Fields.DisplayType))
         {
-            var result = "carousel-picture-";
-            EGalleryType galleryType = EGalleryType.FullWidth;
+            galleryType = (EGalleryType)System.Enum.Parse(typeof(EGalleryType),
+                this.Value<string>(ElementTypes.SliderComponent.Fields.DisplayType));
 
-            if (this.HasValue(ElementTypes.SliderComponent.Fields.DisplayType))
-            {
-                galleryType = (EGalleryType)System.Enum.Parse(typeof(EGalleryType),
-                    this.Value<string>(ElementTypes.SliderComponent.Fields.DisplayType));
-
-                if (galleryType == EGalleryType.Boxed)
-                    result = "picture-";
-            }
-
-            return result;
+            if (galleryType == EGalleryType.Boxed)
+                result = "picture-";
         }
 
-        public SliderComponent(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
-        {
-        }
-
-        public async Task<IHtmlContent> RenderModule(Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper helper)
-        {
-            return await helper.PartialAsync("~/Views/Partials/Modules/Slider.cshtml", this, helper.ViewData);
-        }
-
+        return result;
     }
+
+    public SliderComponent(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
+    {
+    }
+
+    public async Task<IHtmlContent> RenderModule(Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper helper)
+    {
+        return await helper.PartialAsync("~/Views/Partials/Modules/Slider.cshtml", this, helper.ViewData);
+    }
+
 }

@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions
+namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions;
+
+/// <summary>
+/// Exception for error within image processing
+/// </summary>
+public class ImageException : MutoboException
 {
-    /// <summary>
-    /// Exception for error within image processing
-    /// </summary>
-    public class ImageException : MutoboException
+    public ImageException(string message) 
+        : base(message)
     {
-        public ImageException(string message) 
-            : base(message)
-        {
-        }
     }
 }

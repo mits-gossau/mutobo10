@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
+
+public interface IVideoComponent
 {
-    public interface IVideoComponent
-    {
-        string Anchor { get; }
-        Video Video { get; }
-        string Embedded { get; }
-        string Text { get; }
-        int? Width { get; }
-        int? Height { get; }
-        IHtmlContent RenderIFrame(int? width = null, int? height = null);
-    }
+    string Anchor { get; }
+    Video Video { get; }
+    string Embedded { get; }
+    string Text { get; }
+    int? Width { get; }
+    int? Height { get; }
+    IHtmlContent RenderIFrame(int? width = null, int? height = null);
 }

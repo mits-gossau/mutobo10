@@ -10,45 +10,44 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Modules
+namespace Dit.Umb.Mutobo.ToolBox.Modules;
+
+/// <summary>
+/// model class for an accordeon module rendered as html summary details
+/// </summary>
+public class Accordeon : MutoboContentModule, IModule
 {
+
     /// <summary>
-    /// model class for an accordeon module rendered as html summary details
+    /// summary text
     /// </summary>
-    public class Accordeon : MutoboContentModule, IModule
+    public string Summary => this.HasValue(ElementTypes.Accordeon.Fields.Summary)
+        ? this.Value<string>(ElementTypes.Accordeon.Fields.Summary)
+        : null;
+
+    /// <summary>
+    /// details text
+    /// </summary>
+    public string Details => this.HasValue(ElementTypes.Accordeon.Fields.Details)
+        ? this.Value<string>(ElementTypes.Accordeon.Fields.Details)
+        : null;
+
+    /// <summary>
+    /// constructor for an accordeon 
+    /// </summary>
+    /// <param name="content">umbraco content node</param>
+    /// <param name="publishedValueFallback">???</param>
+    public Accordeon(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
     {
+    }
 
-        /// <summary>
-        /// summary text
-        /// </summary>
-        public string Summary => this.HasValue(ElementTypes.Accordeon.Fields.Summary)
-            ? this.Value<string>(ElementTypes.Accordeon.Fields.Summary)
-            : null;
-
-        /// <summary>
-        /// details text
-        /// </summary>
-        public string Details => this.HasValue(ElementTypes.Accordeon.Fields.Details)
-            ? this.Value<string>(ElementTypes.Accordeon.Fields.Details)
-            : null;
-
-        /// <summary>
-        /// constructor for an accordeon 
-        /// </summary>
-        /// <param name="content">umbraco content node</param>
-        /// <param name="publishedValueFallback">???</param>
-        public Accordeon(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
-        {
-        }
-
-        /// <summary>
-        /// render the module
-        /// </summary>
-        /// <param name="helper">current html helper</param>
-        /// <returns>rendered module async</returns>
-        public async Task<IHtmlContent> RenderModule(IHtmlHelper helper)
-        {
-            return await helper.PartialAsync("~/Views/Partials/Modules/Accordeon.cshtml", this, helper.ViewData);
-        }
+    /// <summary>
+    /// render the module
+    /// </summary>
+    /// <param name="helper">current html helper</param>
+    /// <returns>rendered module async</returns>
+    public async Task<IHtmlContent> RenderModule(IHtmlHelper helper)
+    {
+        return await helper.PartialAsync("~/Views/Partials/Modules/Accordeon.cshtml", this, helper.ViewData);
     }
 }

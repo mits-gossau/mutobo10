@@ -10,23 +10,22 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Modules
+namespace Dit.Umb.Mutobo.ToolBox.Modules;
+
+class RichtextComponent : MutoboContentModule, IModule
 {
-    class RichtextComponent : MutoboContentModule, IModule
+    public string RichText => this.HasValue(ElementTypes.RichTextComponent.Fields.RichText)
+? this.Value<string>(ElementTypes.RichTextComponent.Fields.RichText)
+: string.Empty;
+
+    public RichtextComponent(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
     {
-        public string RichText => this.HasValue(ElementTypes.RichTextComponent.Fields.RichText)
-    ? this.Value<string>(ElementTypes.RichTextComponent.Fields.RichText)
-    : string.Empty;
+    }
 
-        public RichtextComponent(IPublishedElement content, IPublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
-        {
-        }
-
-        public async Task<IHtmlContent> RenderModule(IHtmlHelper helper)
-        {
-            var bld = new StringBuilder();
-            bld.Append($"<article>{helper.Raw(RichText)}</article>");
-            return await Task.FromResult<IHtmlContent>(new HtmlString(bld.ToString()));
-        }
+    public async Task<IHtmlContent> RenderModule(IHtmlHelper helper)
+    {
+        var bld = new StringBuilder();
+        bld.Append($"<article>{helper.Raw(RichText)}</article>");
+        return await Task.FromResult<IHtmlContent>(new HtmlString(bld.ToString()));
     }
 }

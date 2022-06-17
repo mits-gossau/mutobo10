@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions
-{
+namespace Dit.Umb.Mutobo.ToolBox.Common.Exceptions;
 
-    /// <summary>
-    /// Exception for errors in appsetting
-    /// </summary>
-    public class AppSettingsException : MutoboException
+/// <summary>
+/// Exception for errors in appsetting
+/// </summary>
+public class AppSettingsException : MutoboException
+{
+    public AppSettingsException(string message) : base(message)
     {
-        public AppSettingsException(string message) : base(message)
-        {
-        }
     }
 }

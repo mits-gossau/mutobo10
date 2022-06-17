@@ -6,15 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.Pages
+namespace Dit.Umb.Mutobo.ToolBox.Models.Pages;
+
+public class ContentPage : ArticlePage
 {
-    public class ContentPage : ArticlePage
+    public IEnumerable<IModule> Modules { get; set; }
+
+
+    public ContentPage(IPublishedContent content) : base(content)
     {
-        public IEnumerable<IModule> Modules { get; set; }
-
-
-        public ContentPage(IPublishedContent content) : base(content)
-        {
-        }
     }
 }

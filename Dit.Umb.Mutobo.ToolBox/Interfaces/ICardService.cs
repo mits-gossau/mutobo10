@@ -6,10 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Dit.Umb.Mutobo.ToolBox.Interfaces
+namespace Dit.Umb.Mutobo.ToolBox.Interfaces;
+
+public interface ICardService
 {
-    public interface ICardService
-    {
-        IEnumerable<Card> GetCards(IPublishedElement element, string fieldName);
-    }
+    IEnumerable<Card> GetCards(IPublishedElement element, string fieldName);
 }

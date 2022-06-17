@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
-{
-    public class SearchFormModel
-    {
-        public string SearchTerm { get; set; }
-        public string Page { get; set; }
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
 
-    }
+public class SearchFormModel
+{
+    public string SearchTerm { get; set; }
+    public string Page { get; set; }
+
 }

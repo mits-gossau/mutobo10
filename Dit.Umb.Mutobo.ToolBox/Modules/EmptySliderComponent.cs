@@ -6,32 +6,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Modules
+namespace Dit.Umb.Mutobo.ToolBox.Modules;
+
+public class EmptySliderComponent : ISliderComponent
 {
-    public class EmptySliderComponent : ISliderComponent
+    public IEnumerable<ISliderItem> Slides { get; set; }
+    public int? Height { get; set; }
+    public int? Interval { get; set; }
+    public int? Width { get; set; }
+    public EGalleryType GalleryType { get; set; }
+    public string Anchor { get; set; }
+
+    public string GetPictureNameSpace()
     {
-        public IEnumerable<ISliderItem> Slides { get; set; }
-        public int? Height { get; set; }
-        public int? Interval { get; set; }
-        public int? Width { get; set; }
-        public EGalleryType GalleryType { get; set; }
-        public string Anchor { get; set; }
-
-        public string GetPictureNameSpace()
-        {
-            var result = "carousel-picture-";
+        var result = "carousel-picture-";
 
 
-            if (GalleryType == EGalleryType.Boxed)
-                result = "picture-";
+        if (GalleryType == EGalleryType.Boxed)
+            result = "picture-";
 
 
-            return result;
-        }
+        return result;
+    }
 
-        public EmptySliderComponent()
-        {
+    public EmptySliderComponent()
+    {
 
-        }
     }
 }

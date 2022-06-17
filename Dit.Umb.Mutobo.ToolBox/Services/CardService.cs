@@ -12,53 +12,52 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Services
+namespace Dit.Umb.Mutobo.ToolBox.Services;
+
+public class CardService : BaseService, ICardService
 {
-    public class CardService : BaseService, ICardService
+    private readonly IImageService _imageService;
+
+    public CardService(ILogger<BaseService> logger, IUmbracoContextAccessor contextAccessor, IImageService imageService) : base(logger, contextAccessor)
     {
-        private readonly IImageService _imageService;
+        _imageService = imageService;
+    }
 
-        public CardService(ILogger<BaseService> logger, IUmbracoContextAccessor contextAccessor, IImageService imageService) : base(logger, contextAccessor)
-        {
-            _imageService = imageService;
-        }
+    public IEnumerable<Card> GetCards(IPublishedElement content, string fieldName)
+    {
+        if (!content.HasValue(fieldName))
+            return null;
 
-        public IEnumerable<Card> GetCards(IPublishedElement content, string fieldName)
-        {
-            if (!content.HasValue(fieldName))
-                return null;
-
-            var result = content.Value<IEnumerable<IPublishedElement>>(fieldName)
-                .Where(c => c.ContentType.Alias == ElementTypes.Card.Alias).Select((element, index) => new
+        var result = content.Value<IEnumerable<IPublishedElement>>(fieldName)
+            .Where(c => c.ContentType.Alias == ElementTypes.Card.Alias).Select((element, index) => new
+            {
+                element = new Card(element, null)
                 {
-                    element = new Card(element, null)
-                    {
-                        SortOrder = index,
-                        Image = element.HasValue(ElementTypes.Card.Fields.Image)
-                            ? _imageService.GetImage(element.Value<IPublishedContent>(ElementTypes.Card.Fields.Image), 850,
-                                450, ImageCropMode.Crop)
-                            : null
-                    },
-                    index
-                }).Select(e => e.element).ToList();
+                    SortOrder = index,
+                    Image = element.HasValue(ElementTypes.Card.Fields.Image)
+                        ? _imageService.GetImage(element.Value<IPublishedContent>(ElementTypes.Card.Fields.Image), 850,
+                            450, ImageCropMode.Crop)
+                        : null
+                },
+                index
+            }).Select(e => e.element).ToList();
 
-            result.AddRange(content.Value<IEnumerable<IPublishedElement>>(fieldName)
-                .Where(c => c.ContentType.Alias == ElementTypes.PersonalCard.Alias)
-                .Select((element, index) => new
+        result.AddRange(content.Value<IEnumerable<IPublishedElement>>(fieldName)
+            .Where(c => c.ContentType.Alias == ElementTypes.PersonalCard.Alias)
+            .Select((element, index) => new
+            {
+                element = new PersonalCard(element, null)
                 {
-                    element = new PersonalCard(element, null)
-                    {
-                        SortOrder = index,
-                        Image = element.HasValue(ElementTypes.Card.Fields.Image)
-                            ? _imageService.GetImage(element.Value<IPublishedContent>(ElementTypes.Card.Fields.Image),
-                                500, 500,
-                                imageCropMode: ImageCropMode.Stretch)
-                            : null
-                    },
-                    index
-                }).Select(e => e.element));
+                    SortOrder = index,
+                    Image = element.HasValue(ElementTypes.Card.Fields.Image)
+                        ? _imageService.GetImage(element.Value<IPublishedContent>(ElementTypes.Card.Fields.Image),
+                            500, 500,
+                            imageCropMode: ImageCropMode.Stretch)
+                        : null
+                },
+                index
+            }).Select(e => e.element));
 
-            return result.OrderBy(e => e.SortOrder);
-        }
+        return result.OrderBy(e => e.SortOrder);
     }
 }

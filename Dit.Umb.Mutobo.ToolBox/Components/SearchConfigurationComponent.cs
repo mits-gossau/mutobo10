@@ -16,146 +16,145 @@ using Dit.Umb.Mutobo.ToolBox.Interfaces;
 using Dit.Umb.Mutobo.ToolBox.Modules;
 using Umbraco.Cms.Core.Services;
 
-namespace Dit.Umb.Mutobo.ToolBox.Components
+namespace Dit.Umb.Mutobo.ToolBox.Components;
+
+public class SearchConfigurationComponent : IComponent
 {
-    public class SearchConfigurationComponent : IComponent
+    private readonly IExamineManager _examineManager;
+    private readonly IUmbracoContextFactory _contextFactory;
+    private readonly IMutoboContentService _mutoboContentService;
+    private readonly IContentService _contentService;
+
+
+
+    public SearchConfigurationComponent(IExamineManager examineManager, IUmbracoContextFactory contextFactory, IMutoboContentService mutoboContentService, IContentService contentService = null)
     {
-        private readonly IExamineManager _examineManager;
-        private readonly IUmbracoContextFactory _contextFactory;
-        private readonly IMutoboContentService _mutoboContentService;
-        private readonly IContentService _contentService;
+
+        // inject ExamineManager
+        _examineManager = examineManager;
+        //
+        _contextFactory = contextFactory;
+        _mutoboContentService = mutoboContentService;
+        _contentService = contentService;
+    }
 
 
 
-        public SearchConfigurationComponent(IExamineManager examineManager, IUmbracoContextFactory contextFactory, IMutoboContentService mutoboContentService, IContentService contentService = null)
+    public void Initialize()
+    {
+        IIndex externalIndex = null;
+        IIndex pdfIndex = null;
+
+        if (_examineManager.TryGetIndex("ExternalIndex", out externalIndex)
+            && _examineManager.TryGetIndex(PdfIndexConstants.PdfIndexName, out pdfIndex))
         {
+            // FieldDefinitionCollection contains all indexed fields 
+            externalIndex.FieldDefinitions.Append(new FieldDefinition(DocumentTypes.ArticlePage.Fields.MainContent, FieldDefinitionTypes.FullText));
+            externalIndex.FieldDefinitions.Append(new FieldDefinition(DocumentTypes.ArticlePage.Fields.Abstract, FieldDefinitionTypes.FullText));
+            externalIndex.FieldDefinitions.Append(new FieldDefinition(DocumentTypes.BasePage.Fields.PageTitle, FieldDefinitionTypes.FullText));
+            ((BaseIndexProvider)externalIndex).TransformingIndexValues += OnTransformingIndexValues;
 
-            // inject ExamineManager
-            _examineManager = examineManager;
-            //
-            _contextFactory = contextFactory;
-            _mutoboContentService = mutoboContentService;
-            _contentService = contentService;
+            ////register multisearcher
+            //var multisearch = new MultiIndexSearcher("MultiSearcher", new IIndex[] { externalIndex, pdfIndex });
+            //_examineManager.AddSearcher(multiSearcher);
+
         }
-
-
-
-        public void Initialize()
+        else
         {
-            IIndex externalIndex = null;
-            IIndex pdfIndex = null;
-
-            if (_examineManager.TryGetIndex("ExternalIndex", out externalIndex)
-                && _examineManager.TryGetIndex(PdfIndexConstants.PdfIndexName, out pdfIndex))
-            {
-                // FieldDefinitionCollection contains all indexed fields 
-                externalIndex.FieldDefinitions.Append(new FieldDefinition(DocumentTypes.ArticlePage.Fields.MainContent, FieldDefinitionTypes.FullText));
-                externalIndex.FieldDefinitions.Append(new FieldDefinition(DocumentTypes.ArticlePage.Fields.Abstract, FieldDefinitionTypes.FullText));
-                externalIndex.FieldDefinitions.Append(new FieldDefinition(DocumentTypes.BasePage.Fields.PageTitle, FieldDefinitionTypes.FullText));
-                ((BaseIndexProvider)externalIndex).TransformingIndexValues += OnTransformingIndexValues;
-
-                ////register multisearcher
-                //var multisearch = new MultiIndexSearcher("MultiSearcher", new IIndex[] { externalIndex, pdfIndex });
-                //_examineManager.AddSearcher(multiSearcher);
-
-            }
-            else
-            {
-                throw new Exception("Index not found");
-            }
+            throw new Exception("Index not found");
         }
+    }
 
-        private void OnTransformingIndexValues(object sender, IndexingItemEventArgs e)
-        {
-            if (int.TryParse(e.ValueSet.Id, out var nodeId))
+    private void OnTransformingIndexValues(object sender, IndexingItemEventArgs e)
+    {
+        if (int.TryParse(e.ValueSet.Id, out var nodeId))
 
-                using (var umbracoContext = _contextFactory.EnsureUmbracoContext())
+            using (var umbracoContext = _contextFactory.EnsureUmbracoContext())
+            {
+                IPublishedContent contentNode = umbracoContext.UmbracoContext.Content.GetById(nodeId);
+
+                if (contentNode != null)
                 {
-                    IPublishedContent contentNode = umbracoContext.UmbracoContext.Content.GetById(nodeId);
-
-                    if (contentNode != null)
+                    foreach (var culture in contentNode.Cultures)
                     {
-                        foreach (var culture in contentNode.Cultures)
+                        if (contentNode != null)
                         {
-                            if (contentNode != null)
+                            
+                            Dictionary<string, IEnumerable<object>> valueSet = new Dictionary<string, IEnumerable<object>>();
+                            List<string> moduleValues = new List<string>();
+
+                            switch (contentNode.ContentType.Alias)
                             {
-                                
-                                Dictionary<string, IEnumerable<object>> valueSet = new Dictionary<string, IEnumerable<object>>();
-                                List<string> moduleValues = new List<string>();
+                                case DocumentTypes.HomePage.Alias:
+                                    if (contentNode.HasValue(DocumentTypes.HomePage.Fields.Modules, culture.Key))
+                                    {
+                                        moduleValues.Add(IndexModules(_mutoboContentService.GetContent(contentNode, DocumentTypes.HomePage.Fields.Modules, culture.Key) as IEnumerable<MutoboContentModule>));
+                                    }
+                                    break;
 
-                                switch (contentNode.ContentType.Alias)
-                                {
-                                    case DocumentTypes.HomePage.Alias:
-                                        if (contentNode.HasValue(DocumentTypes.HomePage.Fields.Modules, culture.Key))
-                                        {
-                                            moduleValues.Add(IndexModules(_mutoboContentService.GetContent(contentNode, DocumentTypes.HomePage.Fields.Modules, culture.Key) as IEnumerable<MutoboContentModule>));
-                                        }
-                                        break;
+                            
+                                case DocumentTypes.ContentPage.Alias:
+                                    if (contentNode.HasValue(DocumentTypes.ContentPage.Fields.Modules, culture.Key))
+                                    {
+                                        moduleValues.Add(IndexModules(_mutoboContentService.GetContent(contentNode, DocumentTypes.ContentPage.Fields.Modules, culture.Key) as IEnumerable<MutoboContentModule>));
+                                    }
+                                    break;
 
-                                
-                                    case DocumentTypes.ContentPage.Alias:
-                                        if (contentNode.HasValue(DocumentTypes.ContentPage.Fields.Modules, culture.Key))
-                                        {
-                                            moduleValues.Add(IndexModules(_mutoboContentService.GetContent(contentNode, DocumentTypes.ContentPage.Fields.Modules, culture.Key) as IEnumerable<MutoboContentModule>));
-                                        }
-                                        break;
-
-                                }
-                                valueSet.Add("modules", moduleValues);
-                                e.SetValues(valueSet);
                             }
+                            valueSet.Add("modules", moduleValues);
+                            e.SetValues(valueSet);
                         }
                     }
                 }
-        }
+            }
+    }
 
 
-        private string IndexModules(IEnumerable<MutoboContentModule> modules)
+    private string IndexModules(IEnumerable<MutoboContentModule> modules)
+    {
+        var result = string.Empty;
+
+        foreach (var module in modules)
         {
-            var result = string.Empty;
 
-            foreach (var module in modules)
+            switch (module.ContentType.Alias)
             {
 
-                switch (module.ContentType.Alias)
-                {
+                case ElementTypes.Heading.Alias:
+                    if (module is Heading heading)
+                    {
+                        result += $"{heading.Text} ";
+                    }
+                    break;
+                case ElementTypes.RichTextComponent.Alias:
+                    if (module is RichtextComponent richtextComponent)
+                    {
+                        result += $"{richtextComponent.RichText.StripHtml()} ";
+                    }
+                    break;
+                case ElementTypes.Flyer.Alias:
+                    break;
+                case ElementTypes.Teaser.Alias:
 
-                    case ElementTypes.Heading.Alias:
-                        if (module is Heading heading)
-                        {
-                            result += $"{heading.Text} ";
-                        }
-                        break;
-                    case ElementTypes.RichTextComponent.Alias:
-                        if (module is RichtextComponent richtextComponent)
-                        {
-                            result += $"{richtextComponent.RichText.StripHtml()} ";
-                        }
-                        break;
-                    case ElementTypes.Flyer.Alias:
-                        break;
-                    case ElementTypes.Teaser.Alias:
+                    break;
+                case ElementTypes.Accordeon.Alias:
 
-                        break;
-                    case ElementTypes.Accordeon.Alias:
+                    break;
+                case ElementTypes.Quote.Alias:
 
-                        break;
-                    case ElementTypes.Quote.Alias:
+                    break;
 
-                        break;
-
-                }
             }
-
-            return result;
         }
 
+        return result;
+    }
 
 
 
-        public void Terminate()
-        {
-        }
+
+    public void Terminate()
+    {
     }
 }
 

@@ -9,20 +9,19 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Modules
+namespace Dit.Umb.Mutobo.ToolBox.Modules;
+
+public class Card : PublishedElementModel
 {
-    public class Card : PublishedElementModel
+    public Image Image { get; set; }
+
+    public Link DetailPageLink => this.HasValue(ElementTypes.Card.Fields.DetailPageLink)
+        ? this.Value<Link>(ElementTypes.Card.Fields.DetailPageLink)
+        : null;
+
+    public int SortOrder { get; set; }
+
+    public Card(IPublishedElement content, PublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
     {
-        public Image Image { get; set; }
-
-        public Link DetailPageLink => this.HasValue(ElementTypes.Card.Fields.DetailPageLink)
-            ? this.Value<Link>(ElementTypes.Card.Fields.DetailPageLink)
-            : null;
-
-        public int SortOrder { get; set; }
-
-        public Card(IPublishedElement content, PublishedValueFallback publishedValueFallback) : base(content, publishedValueFallback)
-        {
-        }
     }
 }

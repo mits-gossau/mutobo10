@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
+
+public class FooterNavBlock
 {
-    public class FooterNavBlock
-    {
-        public Link Title { get; set; }
-        public IEnumerable<Link> Children { get; set; }
-    }
+    public Link Title { get; set; }
+    public IEnumerable<Link> Children { get; set; }
 }

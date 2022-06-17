@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Constants
+namespace Dit.Umb.Mutobo.ToolBox.Constants;
+
+public static class AppConstants
 {
-    public static class AppConstants
-    {
-        public const string LoggingPrefix = "DIT-LogEntry:";
-    }
+    public const string LoggingPrefix = "DIT-LogEntry:";
 }

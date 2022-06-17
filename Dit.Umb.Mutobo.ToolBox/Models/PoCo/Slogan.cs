@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo
+namespace Dit.Umb.Mutobo.ToolBox.Models.PoCo;
+
+public class Slogan
 {
-    public class Slogan
-    {
-        public string Title { get; set; }
-        public string SubTitle { get; set; }
-    }
+    public string Title { get; set; }
+    public string SubTitle { get; set; }
 }

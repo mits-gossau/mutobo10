@@ -11,25 +11,24 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Dit.Umb.Mutobo.ToolBox.Services
+namespace Dit.Umb.Mutobo.ToolBox.Services;
+
+public class PictureLinkService : BaseService, IPictureLinkService
 {
-    public class PictureLinkService : BaseService, IPictureLinkService
+    private readonly IImageService _imageService;
+
+    public PictureLinkService(ILogger<PictureLinkService> logger, IUmbracoContextAccessor contextAccessor, IImageService imageService) : base(logger, contextAccessor)
     {
-        private readonly IImageService _imageService;
+        _imageService = imageService;
+    }
 
-        public PictureLinkService(ILogger<PictureLinkService> logger, IUmbracoContextAccessor contextAccessor, IImageService imageService) : base(logger, contextAccessor)
+    public IEnumerable<PictureLink> GetPictureLinks(IEnumerable<IPublishedElement> elements)
+    {
+        return elements.Select(e => new PictureLink(e)
         {
-            _imageService = imageService;
-        }
-
-        public IEnumerable<PictureLink> GetPictureLinks(IEnumerable<IPublishedElement> elements)
-        {
-            return elements.Select(e => new PictureLink(e)
-            {
-                Image = e.HasValue(ElementTypes.PictureLink.Fields.Image) ?
-                    _imageService.GetImage(e.Value<IPublishedContent>(ElementTypes.PictureLink.Fields.Image))
-                    : null
-            });
-        }
+            Image = e.HasValue(ElementTypes.PictureLink.Fields.Image) ?
+                _imageService.GetImage(e.Value<IPublishedContent>(ElementTypes.PictureLink.Fields.Image))
+                : null
+        });
     }
 }

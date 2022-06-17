@@ -7,35 +7,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Dit.Umb.Mutobo.ToolBox.Modules
+namespace Dit.Umb.Mutobo.ToolBox.Modules;
+
+/// <summary>
+/// abstract class for a MUTOBO content module
+/// </summary>
+public abstract class MutoboContentModule : PublishedElementModel, IModule
 {
 
     /// <summary>
-    /// abstract class for a MUTOBO content module
+    /// constructor for a MUTOBO content module
     /// </summary>
-    public abstract class MutoboContentModule : PublishedElementModel, IModule
+    /// <param name="content">
+    /// umbraco published element
+    /// </param>
+    /// <param name="publishedValueFallback">
+    /// ????
+    /// </param>
+    public MutoboContentModule(
+        IPublishedElement content, 
+        IPublishedValueFallback publishedValueFallback) 
+        : base(content, publishedValueFallback)
     {
-
-        /// <summary>
-        /// constructor for a MUTOBO content module
-        /// </summary>
-        /// <param name="content">
-        /// umbraco published element
-        /// </param>
-        /// <param name="publishedValueFallback">
-        /// ????
-        /// </param>
-        public MutoboContentModule(
-            IPublishedElement content, 
-            IPublishedValueFallback publishedValueFallback) 
-            : base(content, publishedValueFallback)
-        {
-        }
-
-        public bool SpaceBeforeModule { get; }
-        public string ModuleTitle { get; }
-        public bool SpacerAfterModule { get; }
-        public int SortOrder { get; set; }
-        public string Anchor { get; set; }
     }
+
+    public bool SpaceBeforeModule { get; }
+    public string ModuleTitle { get; }
+    public bool SpacerAfterModule { get; }
+    public int SortOrder { get; set; }
+    public string Anchor { get; set; }
 }
