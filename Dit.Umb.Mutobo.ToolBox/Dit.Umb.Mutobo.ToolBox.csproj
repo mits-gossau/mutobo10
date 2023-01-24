@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,9 +10,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="10.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Common" Version="10.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="11.1.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="11.1.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="11.1.0" />
     <PackageReference Include="Umbraco.ExaminePDF" Version="10.0.0" />
   </ItemGroup>
 
